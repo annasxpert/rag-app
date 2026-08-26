@@ -1,0 +1,56 @@
+services:
+  - type: web
+    name: rag-mobile-assistant-api
+    runtime: python
+    plan: free
+    rootDir: rag-mobile/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      # ── Pinecone ──────────────────────────────────────────────────────────
+      - key: PINECONE_API_KEY
+        sync: false        # set manually in Render dashboard
+      - key: PINECONE_INDEX_NAME
+        value: mobile-rag
+      - key: PINECONE_CLOUD
+        value: aws
+      - key: PINECONE_REGION
+        value: us-east-1
+      - key: PINECONE_NAMESPACE
+        value: mobiles
+
+      # ── Chat Memory ───────────────────────────────────────────────────────
+      # memory = in-RAM (reset on restart, no disk). file = persistent JSON.
+      - key: MEMORY_BACKEND
+        value: memory
+
+      # ── HuggingFace (query embedding — free, no local model download) ─────
+      # Optional: set for higher rate limits. Leave blank for free anonymous.
+      - key: HUGGINGFACE_API_KEY
+        sync: false
+
+      # ── LLM Providers ─────────────────────────────────────────────────────
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.0-flash
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: MISTRAL_MODEL
+        value: mistral-small-latest
+
+      # ── Retrieval ──────────────────────────────────────────────────────────
+      - key: TOP_K
+        value: "5"
+      - key: MAX_HISTORY_TURNS
+        value: "10"
+
+      # ── CORS (set to your Netlify frontend URL) ────────────────────────────
+      - key: FRONTEND_URL
+        value: ""   # e.g. https://your-app.netlify.app — leave blank for wildcard *

@@ -1,0 +1,20 @@
+{
+  "session_id": "f6aad351-dc7c-4fb3-a20a-0bbe427046af",
+  "title": "Samsung phone under 50k",
+  "created_at": "2026-08-24T03:52:04.337687+00:00",
+  "updated_at": "2026-08-24T03:52:07.818691+00:00",
+  "messages": [
+    {
+      "id": "msg_f499a8d810",
+      "role": "user",
+      "content": "Samsung phone under 50k",
+      "timestamp": "2026-08-24T03:52:07.787434+00:00"
+    },
+    {
+      "id": "msg_e30a9e26da",
+      "role": "assistant",
+      "content": "**Sorry, we don’t have any Samsung models priced under Rs. 50,000 in the current catalog.**  \n\nAll the Samsung phones listed right now are premium devices ranging from **Rs. 372,999** to **Rs. 507,000**, which are well above a 50 k budget.\n\n### What you can do next\n- **Adjust your budget a bit higher** (e.g., Rs. 70‑100 k) – you’ll start seeing mid‑range Samsung options like the Galaxy A‑series (not in the catalog right now but commonly available in that price bracket).  \n- **Explore other brands** that offer solid performance under Rs. 50 k, such as Xiaomi, Realme, or Vivo. They have great cameras, good batteries, and fast charging at that price point.  \n- **Wait for upcoming sales or promotions** – Samsung often releases discounted models during festive seasons, which can bring the price closer to your target.\n\nWould you like me to recommend some **non‑Samsung phones under Rs. 50 k** that deliver good value, or help you explore a slightly higher budget for Samsung? Let me know how you’d like to proceed!",
+      "timestamp": "2026-08-24T03:52:07.818691+00:00"
+    }
+  ]
+}

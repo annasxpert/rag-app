@@ -1,0 +1,32 @@
+{
+  "session_id": "38b0461a-7d5b-4010-a229-20893d45dab0",
+  "title": "What is the battery capacity of Vivo Y03 Max?",
+  "created_at": "2026-08-23T14:13:26.604075+00:00",
+  "updated_at": "2026-08-23T14:21:06.575072+00:00",
+  "messages": [
+    {
+      "id": "msg_ed194b4360",
+      "role": "user",
+      "content": "What is the battery capacity of Vivo Y03 Max?",
+      "timestamp": "2026-08-23T14:17:01.246841+00:00"
+    },
+    {
+      "id": "msg_fbadce6371",
+      "role": "assistant",
+      "content": "**Vivo Y03 Max** ka battery capacity **5,400 mAh** hai (non‑removable) aur ye 120W FlashCharge ke saath aata hai, jo kuch hi minutes mein full charge kar deta hai.",
+      "timestamp": "2026-08-23T14:17:01.302784+00:00"
+    },
+    {
+      "id": "msg_2c48dd3707",
+      "role": "user",
+      "content": "50 hazar tak acha gaming phone batao",
+      "timestamp": "2026-08-23T14:21:06.527915+00:00"
+    },
+    {
+      "id": "msg_446ae4c53f",
+      "role": "assistant",
+      "content": "Assalam-o-Alaikum! 50,000 tak gaming ke liye phone chahiye, theek hai.\n\nDekhiye, jo phones mere paas abhi available hain unki list mein, **Vivo Y100 series** ke models aapke budget se kaafi upar hain. Misal ke taur par, **Vivo Y100 v2** jo 'Coming Soon' hai, uski price bhi **Rs. 77,999** hai, aur baaki models to aur bhi high-end hain.\n\nFilhaal mere paas jo Vivo phones hain, unmein se koi bhi **PKR 50,000** ke budget mein fit nahi ho raha.\n\nAgar aap apna budget thoda barha sakte hain, ya kisi aur brand ke options dekhna chahte hain (jo mere paas abhi is list mein nahi hain), to main aapki mazeed madad kar sakta hoon.",
+      "timestamp": "2026-08-23T14:21:06.575072+00:00"
+    }
+  ]
+}

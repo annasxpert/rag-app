@@ -1,0 +1,136 @@
+{
+  "session_id": "ad598c52-e714-4c5e-840d-8eaad77030f4",
+  "title": "Hi",
+  "created_at": "2026-08-23T13:56:30.496664+00:00",
+  "updated_at": "2026-08-23T14:05:35.990595+00:00",
+  "messages": [
+    {
+      "id": "msg_3450f4210e",
+      "role": "user",
+      "content": "Hi",
+      "timestamp": "2026-08-23T13:57:20.417429+00:00"
+    },
+    {
+      "id": "msg_2922aaac36",
+      "role": "assistant",
+      "content": "Hello! Welcome. How can I help you today? \n\nAre you looking to buy a new phone? Tell me your preferred **budget**, any favorite **brands**, or specific features you care about most (like gaming performance, camera, or battery life), and I'll find the best options for you!",
+      "timestamp": "2026-08-23T13:57:20.469142+00:00",
+      "sources": []
+    },
+    {
+      "id": "msg_b52265c3ed",
+      "role": "user",
+      "content": "How can you help me",
+      "timestamp": "2026-08-23T13:58:11.277367+00:00"
+    },
+    {
+      "id": "msg_de8dbe338a",
+      "role": "assistant",
+      "content": "I am your personal mobile phone consultant! Whether you are upgrading your phone or buying a new one in Pakistan, here is how I can help you:\n\n* 💰 **Budget Recommendations:** Just tell me your target price (e.g., under Rs. 30,000, around Rs. 80,000, etc.), and I’ll share the best value-for-money options.\n* ⚡ **Feature-Specific Picks:** Looking for high-end gaming, long battery life, high-resolution displays, or great cameras? I'll point you to the right models.\n* 🔄 **Side-by-Side Comparisons:** If you are confused between two or more phones, I can break down their pros, cons, and real-world performance differences.\n* 📋 **Specs & Details:** I can give you clear details on processor power, RAM/storage, screen refresh rates, and charging speeds.\n\nTo get started, what budget do you have in mind, or what features are most important to you?",
+      "timestamp": "2026-08-23T13:58:11.309725+00:00",
+      "sources": []
+    },
+    {
+      "id": "msg_515231bd3d",
+      "role": "user",
+      "content": "under 50k suggest me best mobiles of different companies",
+      "timestamp": "2026-08-23T13:59:26.360588+00:00"
+    },
+    {
+      "id": "msg_7e3c52a481",
+      "role": "assistant",
+      "content": "Right now in our catalog, we only have options available from **Motorola**. \n\nHere is what is available strictly under **Rs. 50,000**, along with a very strong option just slightly above your budget:\n\n---\n\n### 1. 📱 **Motorola Edge 50 Pro Play** *(Under Budget",
+      "timestamp": "2026-08-23T13:59:26.425857+00:00",
+      "sources": [
+        {
+          "model": "Motorola Edge 50 Pro SE",
+          "relevance": 0.53
+        },
+        {
+          "model": "Motorola Edge 50 Pro Play",
+          "relevance": 0.524
+        },
+        {
+          "model": "Motorola Edge 50 Fusion Lite",
+          "relevance": 0.519
+        },
+        {
+          "model": "Motorola Edge 50 Pro",
+          "relevance": 0.519
+        },
+        {
+          "model": "Motorola Edge 50 Fusion Prime",
+          "relevance": 0.519
+        }
+      ]
+    },
+    {
+      "id": "msg_6e6dc9fec5",
+      "role": "user",
+      "content": "hi",
+      "timestamp": "2026-08-23T14:05:15.318244+00:00"
+    },
+    {
+      "id": "msg_e021d24dc9",
+      "role": "assistant",
+      "content": "Hello! How can I help you today?\n\nIf you're looking for a new smartphone, feel free to share your **budget**, preferred **brand**, or key features you care about (like great cameras, battery life, or gaming performance), and I'll gladly guide you to the best options!",
+      "timestamp": "2026-08-23T14:05:15.367041+00:00",
+      "sources": [
+        {
+          "model": "Motorola Edge 50 Pro SE",
+          "relevance": 0.531
+        },
+        {
+          "model": "Motorola Edge 50 Pro Play",
+          "relevance": 0.525
+        },
+        {
+          "model": "Motorola Edge 50 Fusion Lite",
+          "relevance": 0.521
+        },
+        {
+          "model": "Motorola Edge 50 Fusion Prime",
+          "relevance": 0.52
+        },
+        {
+          "model": "Motorola Edge 50 Pro",
+          "relevance": 0.519
+        }
+      ]
+    },
+    {
+      "id": "msg_998d633df1",
+      "role": "user",
+      "content": "Okay whats the specs of motorola edge 50 pro play",
+      "timestamp": "2026-08-23T14:05:35.910500+00:00"
+    },
+    {
+      "id": "msg_a65a1526a6",
+      "role": "assistant",
+      "content": "In our catalog, there are three different variants listed under the **Motorola Edge 50 Pro Play**. Here are the full specifications for each version:\n\n---\n\n### 1. 📱 **Motorola Edge 50 Pro Play (Rs. 45,000)** — *Status: Discontinued*\n* **Display:** 6.7 inches Super Retina XDR OLED, 120Hz (1290 x 2796 pixels)\n* **Processor:** Snapdragon 695\n* **RAM & Storage:** 4GB RAM / 128GB Storage\n* **Rear Cameras:** 50 MP (wide, OIS) + 50 MP (periscope telephoto) + 50 MP (ultrawide",
+      "timestamp": "2026-08-23T14:05:35.990595+00:00",
+      "sources": [
+        {
+          "model": "Motorola Edge 50 Pro Play",
+          "relevance": 0.654
+        },
+        {
+          "model": "Motorola Edge 50 Pro Play",
+          "relevance": 0.639
+        },
+        {
+          "model": "Motorola Edge 50 Pro",
+          "relevance": 0.636
+        },
+        {
+          "model": "Motorola Edge 50 Pro Play",
+          "relevance": 0.634
+        },
+        {
+          "model": "Motorola Edge 50 Pro Pro",
+          "relevance": 0.63
+        }
+      ]
+    }
+  ]
+}

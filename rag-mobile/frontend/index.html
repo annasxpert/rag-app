@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Pakistan Mobile Phone Shopping Assistant — AI-powered advisor grounded in a live Pakistani mobile catalog." />
+  <meta name="theme-color" content="#060d1f" />
+  <title>Mobile Assistant PK · Phone Shopping Advisor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ─────────────────────────────────────── */
+    :root {
+      --bg:          #060d1f;
+      --bg2:         #091326;
+      --surface:     rgba(13, 27, 50, 0.55);
+      --surface2:    rgba(13, 27, 50, 0.85);
+      --glass-border:rgba(255,255,255,0.07);
+      --glass-border-accent: rgba(20,184,166,0.35);
+
+      --teal:        #14b8a6;
+      --teal-dim:    #0d9488;
+      --teal-glow:   rgba(20,184,166,0.22);
+      --blue:        #3b82f6;
+      --blue-dim:    #2563eb;
+      --blue-glow:   rgba(59,130,246,0.22);
+
+      --user-bubble: linear-gradient(135deg, #1d4ed8 0%, #14b8a6 100%);
+      --ai-bubble:   rgba(13,27,50,0.70);
+
+      --txt:         #e2e8f0;
+      --txt2:        #94a3b8;
+      --txt3:        #475569;
+
+      --radius-sm:   8px;
+      --radius-md:   14px;
+      --radius-lg:   20px;
+      --radius-xl:   28px;
+      --radius-pill: 999px;
+
+      --ease:        cubic-bezier(0.16,1,0.3,1);
+      --dur:         0.28s;
+    }
+
+    /* ── RESET ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      height: 100dvh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    /* ── AMBIENT GLOW BACKGROUND ───────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 0%,   rgba(59,130,246,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 85% 100%,  rgba(20,184,166,0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 35% at 50% 50%,   rgba(99,102,241,0.05) 0%, transparent 70%);
+    }
+
+    /* ── HEADER ─────────────────────────────────────── */
+    header {
+      position: relative; z-index: 20;
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      background: rgba(6,13,31,0.75);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+
+    .logo {
+      width: 40px; height: 40px; flex-shrink: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--teal) 0%, var(--blue) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px; letter-spacing: 0.5px; color: #fff;
+      box-shadow: 0 0 16px var(--teal-glow), 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .header-info { flex: 1; min-width: 0; }
+    .header-info h1 {
+      font-size: 15px; font-weight: 700; color: var(--txt); line-height: 1.2;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .header-info p {
+      font-size: 11.5px; color: var(--txt2); font-weight: 400; margin-top: 1px;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+      font-size: 11.5px; font-weight: 500; color: var(--txt2);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #6b7280;
+    }
+    .status-dot.online  { background: #22c55e; box-shadow: 0 0 6px #22c55e; animation: pulse-green 2s infinite; }
+    .status-dot.offline { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+
+    @keyframes pulse-green {
+      0%,100% { box-shadow: 0 0 4px #22c55e; }
+      50%      { box-shadow: 0 0 10px #22c55e, 0 0 16px rgba(34,197,94,0.4); }
+    }
+
+    .new-chat-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border);
+      color: var(--txt2); cursor: pointer; transition: all var(--dur) var(--ease);
+    }
+    .new-chat-btn:hover {
+      background: rgba(20,184,166,0.12); border-color: var(--glass-border-accent);
+      color: var(--teal);
+    }
+    .new-chat-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* ── CHAT MAIN ──────────────────────────────────── */
+    main {
+      position: relative; z-index: 1;
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      padding: 20px 16px 8px;
+      scroll-behavior: smooth;
+    }
+    main::-webkit-scrollbar { width: 4px; }
+    main::-webkit-scrollbar-track { background: transparent; }
+    main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+    .thread {
+      max-width: 760px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 18px;
+      min-height: 100%;
+    }
+
+    /* ── WELCOME SCREEN ─────────────────────────────── */
+    .welcome {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 16px 8px 12px;
+      margin: auto 0;
+      animation: fadeUp 0.6s var(--ease) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .orb-wrap {
+      position: relative; width: 96px; height: 96px; margin-bottom: 20px;
+    }
+    .orb {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: radial-gradient(circle at 38% 36%, var(--blue) 0%, var(--teal) 55%, #0f172a 100%);
+      box-shadow: 0 0 35px var(--teal-glow), 0 0 70px var(--blue-glow);
+      animation: orbFloat 5s ease-in-out infinite;
+    }
+    .orb-ring {
+      position: absolute; inset: -12px; border-radius: 50%;
+      border: 1px solid rgba(20,184,166,0.25);
+      animation: orbRing 8s linear infinite;
+    }
+    .orb-ring2 {
+      position: absolute; inset: -22px; border-radius: 50%;
+      border: 1px solid rgba(59,130,246,0.15);
+      animation: orbRing 12s linear infinite reverse;
+    }
+
+    @keyframes orbFloat {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-6px) scale(1.02); }
+    }
+    @keyframes orbRing {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .welcome-title {
+      font-size: clamp(22px, 4.5vw, 30px); font-weight: 800;
+      line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 8px;
+    }
+    .welcome-title span {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--blue) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-sub {
+      font-size: 13px; color: var(--txt2); max-width: 380px;
+      line-height: 1.5; margin-bottom: 22px;
+    }
+
+    .chips {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      justify-content: center; max-width: 520px;
+    }
+
+    .chip {
+      padding: 8px 15px; border-radius: var(--radius-pill);
+      background: var(--surface); border: 1px solid var(--glass-border);
+      font-size: 12px; font-weight: 500; color: var(--txt2);
+      cursor: pointer; transition: all var(--dur) var(--ease);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      animation: chipIn 0.45s var(--ease) both;
+    }
+    .chip:nth-child(1) { animation-delay: 0.06s; }
+    .chip:nth-child(2) { animation-delay: 0.12s; }
+    .chip:nth-child(3) { animation-delay: 0.18s; }
+    .chip:nth-child(4) { animation-delay: 0.24s; }
+    .chip:nth-child(5) { animation-delay: 0.30s; }
+    .chip:nth-child(6) { animation-delay: 0.36s; }
+
+    @keyframes chipIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.95); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .chip:hover {
+      background: rgba(20,184,166,0.14);
+      border-color: var(--glass-border-accent);
+      color: var(--teal);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px var(--teal-glow);
+    }
+
+    @media (max-height: 680px) {
+      .orb-wrap { width: 72px; height: 72px; margin-bottom: 12px; }
+      .welcome-sub { margin-bottom: 14px; font-size: 12px; }
+      .welcome-title { font-size: 20px; margin-bottom: 4px; }
+      .chip { padding: 6px 12px; font-size: 11.5px; }
+      .chips { gap: 6px; }
+    }
+
+    /* ── MESSAGES ───────────────────────────────────── */
+    .msg {
+      display: flex; gap: 10px; align-items: flex-end;
+      animation: msgIn 0.35s var(--ease) both;
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .msg.user { justify-content: flex-end; }
+    .msg.assistant { justify-content: flex-start; }
+
+    .avatar {
+      width: 30px; height: 30px; border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--teal-dim), var(--blue-dim));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .bubble {
+      max-width: min(75%, 560px);
+      padding: 12px 16px;
+      font-size: 13.5px; line-height: 1.7;
+      position: relative; word-break: break-word;
+    }
+
+    .msg.user .bubble {
+      background: var(--user-bubble);
+      color: #fff;
+      border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
+      box-shadow: 0 4px 20px rgba(20,184,166,0.2), 0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    .msg.assistant .bubble {
+      background: var(--ai-bubble);
+      color: var(--txt);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Markdown in AI bubble */
+    .md h1,.md h2,.md h3 { font-weight: 700; margin: 12px 0 6px; color: var(--txt); }
+    .md h1 { font-size: 16px; }
+    .md h2 { font-size: 15px; }
+    .md h3 { font-size: 13.5px; color: var(--teal); }
+    .md p  { margin: 6px 0; }
+    .md strong { color: var(--teal); font-weight: 600; }
+    .md em { color: var(--txt2); font-style: italic; }
+    .md ul, .md ol { margin: 6px 0 6px 18px; }
+    .md li { margin-bottom: 3px; }
+    .md ul li::marker { color: var(--teal); }
+    .md ol li::marker { color: var(--teal); font-weight: 600; }
+    .md code {
+      background: rgba(59,130,246,0.12); color: #93c5fd;
+      padding: 2px 6px; border-radius: 5px;
+      font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 12px;
+    }
+    .md pre {
+      background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: 12px 14px; overflow-x: auto; margin: 8px 0;
+    }
+    .md pre code { background: none; color: var(--txt); padding: 0; font-size: 12px; }
+    .md table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 12.5px; }
+    .md th {
+      background: rgba(20,184,166,0.08); color: var(--teal);
+      padding: 6px 10px; border-bottom: 1.5px solid var(--glass-border-accent);
+      font-weight: 600; text-align: left;
+    }
+    .md td { padding: 6px 10px; border-bottom: 1px solid var(--glass-border); }
+    .md tr:hover td { background: rgba(20,184,166,0.03); }
+    .md hr { border: none; height: 1px; background: var(--glass-border); margin: 10px 0; }
+    .md blockquote {
+      border-left: 3px solid var(--blue); padding-left: 12px;
+      margin: 8px 0; color: var(--txt2); font-style: italic;
+    }
+
+    /* Follow-up suggestions */
+    .followups { margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.07); }
+    .followups-label {
+      font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--teal); margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
+    }
+    .followups-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+    .followup-btn {
+      background: rgba(20,184,166,0.07); border: 1px solid rgba(20,184,166,0.2);
+      color: var(--txt2); padding: 6px 13px; border-radius: var(--radius-pill);
+      font-size: 12px; font-weight: 500; font-family: inherit;
+      cursor: pointer; transition: all var(--dur) var(--ease);
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .followup-btn:hover {
+      background: rgba(20,184,166,0.18); border-color: var(--teal);
+      color: var(--teal); transform: translateY(-2px);
+      box-shadow: 0 4px 14px var(--teal-glow);
+    }
+
+    /* Typing indicator */
+    #typingMsg .bubble { padding: 14px 18px; }
+    .typing {
+      display: flex; align-items: center; gap: 5px;
+    }
+    .typing-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--teal); opacity: 0.5;
+      animation: typBounce 1.3s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes typBounce {
+      0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+      30%          { transform: translateY(-7px); opacity: 1; }
+    }
+    .typing-txt { font-size: 12px; color: var(--txt3); margin-left: 6px; font-style: italic; }
+
+    /* ── FOOTER / COMPOSER ──────────────────────────── */
+    footer {
+      position: relative; z-index: 20;
+      padding: 10px 16px max(14px, env(safe-area-inset-bottom));
+      background: rgba(6,13,31,0.80);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+
+    .composer {
+      max-width: 760px; margin: 0 auto;
+      background: rgba(13,27,50,0.70);
+      border: 1.5px solid var(--glass-border-accent);
+      border-radius: var(--radius-xl);
+      padding: 14px 16px 12px;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+    }
+    .composer:focus-within {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px var(--teal-glow), 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .composer-input {
+      width: 100%; background: none; border: none; outline: none;
+      color: var(--txt); font-family: inherit; font-size: 14px; line-height: 1.55;
+      resize: none; min-height: 22px; max-height: 120px;
+      overflow-y: auto; display: block;
+    }
+    .composer-input::placeholder { color: var(--txt3); }
+
+    .composer-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 10px; gap: 8px;
+    }
+    .composer-left { display: flex; align-items: center; gap: 8px; }
+
+    .provider-pill {
+      appearance: none; -webkit-appearance: none;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+      color: var(--txt2); font-family: inherit; font-size: 11.5px; font-weight: 500;
+      padding: 5px 24px 5px 10px; border-radius: var(--radius-pill);
+      cursor: pointer; outline: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 5.646a.5.5 0 01.708 0L8 8.293l2.646-2.647a.5.5 0 01.708.708l-3 3a.5.5 0 01-.708 0l-3-3a.5.5 0 010-.708z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 8px center;
+      transition: all var(--dur) var(--ease);
+    }
+    .provider-pill:focus { border-color: var(--teal); color: var(--teal); }
+    .provider-pill option { background: #0f1e33; color: var(--txt); }
+
+    .model-label {
+      font-size: 11px; color: var(--txt3); font-weight: 500;
+      padding: 4px 10px; border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
+      white-space: nowrap;
+    }
+
+    .send-btn {
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--blue-dim), var(--teal));
+      border: none; color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--dur) var(--ease);
+      box-shadow: 0 2px 12px var(--teal-glow);
+      position: relative; overflow: hidden;
+    }
+    .send-btn svg { width: 16px; height: 16px; fill: currentColor; transition: transform var(--dur) var(--ease); }
+    .send-btn:hover:not(:disabled) {
+      transform: scale(1.08);
+      box-shadow: 0 0 20px var(--teal-glow), 0 0 40px var(--blue-glow);
+    }
+    .send-btn:hover:not(:disabled) svg { transform: translateX(2px); }
+    .send-btn:active:not(:disabled) { transform: scale(0.95); }
+    .send-btn:disabled { opacity: 0.4; cursor: default; }
+
+    /* Ripple */
+    .ripple {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      background: rgba(255,255,255,0.25);
+      transform: scale(0); animation: rippleAnim 0.5s linear;
+    }
+    @keyframes rippleAnim {
+      to { transform: scale(2.5); opacity: 0; }
+    }
+
+    /* ── POWERED BY ─────────────────────────────────── */
+    .powered-by {
+      text-align: center; font-size: 10.5px; color: var(--txt3);
+      margin-top: 8px; letter-spacing: 0.2px;
+    }
+    .powered-by a { color: var(--teal); text-decoration: none; font-weight: 500; }
+    .powered-by a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 480px) {
+      header { padding: 12px 14px; }
+      .logo  { width: 34px; height: 34px; font-size: 11px; border-radius: 10px; }
+      .header-info h1  { font-size: 13.5px; }
+      .header-info p   { font-size: 10.5px; }
+      .status-pill     { padding: 4px 9px; font-size: 10.5px; }
+      main             { padding: 16px 12px 6px; }
+      .bubble          { font-size: 13px; padding: 10px 13px; }
+      .welcome-title   { font-size: 22px; }
+      .welcome-sub     { font-size: 12.5px; }
+      .chips           { gap: 6px; }
+      .chip            { font-size: 11.5px; padding: 7px 13px; }
+      footer           { padding: 8px 12px max(12px, env(safe-area-inset-bottom)); }
+      .composer        { border-radius: 18px; padding: 12px 13px 10px; }
+      .composer-input  { font-size: 13.5px; }
+      .send-btn        { width: 35px; height: 35px; }
+    }
+
+    @media (max-width: 360px) {
+      .header-info p { display: none; }
+      .welcome-title { font-size: 20px; }
+      .orb-wrap      { width: 90px; height: 90px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── HEADER ────────────────────────────────────── -->
+  <header>
+    <div class="logo" aria-hidden="true">PK</div>
+    <div class="header-info">
+      <h1>Mobile Assistant PK</h1>
+      <p>Pakistan Phone Shopping Advisor</p>
+    </div>
+    <div class="header-right">
+      <div class="status-pill" id="statusPill">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusTxt">Connecting</span>
+      </div>
+      <button class="new-chat-btn" id="newChatBtn" onclick="startNewChat()" title="New chat" type="button" aria-label="Start new chat">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── CHAT AREA ─────────────────────────────────── -->
+  <main id="chatMain" role="log" aria-label="Chat messages" aria-live="polite">
+    <div class="thread" id="thread">
+
+      <!-- Welcome screen (hidden when chat starts) -->
+      <div class="welcome" id="welcomeScreen">
+        <div class="orb-wrap" aria-hidden="true">
+          <div class="orb"></div>
+          <div class="orb-ring"></div>
+          <div class="orb-ring2"></div>
+        </div>
+        <h2 class="welcome-title">Ask <span>Mobile Assistant PK</span></h2>
+        <p class="welcome-sub">Your AI-powered phone shopping advisor grounded in Pakistan's mobile catalog — prices, specs, comparisons, all in PKR.</p>
+        <div class="chips" role="group" aria-label="Quick questions">
+          <button class="chip" onclick="ask('Best phone under Rs. 50,000 for gaming?')" type="button">🎮 Best under 50k gaming</button>
+          <button class="chip" onclick="ask('Show me Samsung phones under Rs. 80,000')" type="button">📱 Samsung under 80k</button>
+          <button class="chip" onclick="ask('Compare Xiaomi vs Realme in 30k budget')" type="button">⚖️ Xiaomi vs Realme 30k</button>
+          <button class="chip" onclick="ask('Best camera phone under Rs. 60,000?')" type="button">📸 Best camera under 60k</button>
+          <button class="chip" onclick="ask('What is the battery life of Vivo Y03 Max?')" type="button">🔋 Vivo Y03 Max battery</button>
+          <button class="chip" onclick="ask('iPhone alternatives under Rs. 100,000?')" type="button">🍎 iPhone alternatives</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── COMPOSER ──────────────────────────────────── -->
+  <footer>
+    <div class="composer" id="composerBox">
+      <textarea
+        class="composer-input" id="questionInput"
+        rows="1"
+        placeholder="Ask about any phone, budget, or specs..."
+        aria-label="Type your question"
+        autocomplete="off" autocorrect="off" spellcheck="false"
+      ></textarea>
+      <div class="composer-bar">
+        <div class="composer-left">
+          <select class="provider-pill" id="providerSelect" aria-label="Select AI provider"></select>
+          <span class="model-label" id="modelLabel">—</span>
+        </div>
+        <button class="send-btn" id="sendBtn" type="button" aria-label="Send message">
+          <svg viewBox="0 0 24 24"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94l18.04-8.25a.75.75 0 000-1.39L3.478 2.405z"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="powered-by">Powered by <a href="https://pinecone.io" target="_blank" rel="noopener">Pinecone</a> · FastAPI · Groq / Gemini / Mistral</div>
+  </footer>
+
+  <script>
+    /* ════════════════════════════════════════
+       CONFIG
+    ════════════════════════════════════════ */
+    // Leave empty for same-origin (Nginx / EC2 / Server), or specify external URL
+    const BACKEND_URL = '';
+
+    function getApiBase() {
+      if (BACKEND_URL) return BACKEND_URL.replace(/\/+$/, '');
+      if (window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '3000') {
+        return 'http://127.0.0.1:8000';
+      }
+      return '';
+    }
+
+    const PROVIDER_MODELS = {
+      groq:    'llama-3.1-8b-instant',
+      gemini:  'gemini-2.0-flash',
+      mistral: 'mistral-small-latest',
+    };
+
+    /* ════════════════════════════════════════
+       DOM REFS
+    ════════════════════════════════════════ */
+    const thread       = document.getElementById('thread');
+    const chatMain     = document.getElementById('chatMain');
+    const input        = document.getElementById('questionInput');
+    const sendBtn      = document.getElementById('sendBtn');
+    const providerSel  = document.getElementById('providerSelect');
+    const modelLabel   = document.getElementById('modelLabel');
+    const statusDot    = document.getElementById('statusDot');
+    const statusTxt    = document.getElementById('statusTxt');
+    const welcomeEl    = document.getElementById('welcomeScreen');
+
+    let currentSessionId = localStorage.getItem('pk_session_id') || null;
+
+    /* ════════════════════════════════════════
+       PROVIDER / MODEL SETUP
+    ════════════════════════════════════════ */
+    function initProviders() {
+      providerSel.innerHTML = '';
+      Object.keys(PROVIDER_MODELS).forEach(p => {
+        const o = document.createElement('option');
+        o.value = p; o.textContent = p.charAt(0).toUpperCase() + p.slice(1);
+        providerSel.appendChild(o);
+      });
+      providerSel.value = 'groq';
+      modelLabel.textContent = PROVIDER_MODELS['groq'];
+    }
+
+    providerSel.addEventListener('change', () => {
+      modelLabel.textContent = PROVIDER_MODELS[providerSel.value] || '—';
+    });
+
+    /* ════════════════════════════════════════
+       HEALTH CHECK
+    ════════════════════════════════════════ */
+    async function checkHealth() {
+      const pill = document.getElementById('statusPill');
+      try {
+        const res = await fetch(`${getApiBase()}/health`, { signal: AbortSignal.timeout(8000) });
+        if (res.ok) {
+          const d = await res.json();
+          statusDot.className = 'status-dot online';
+          statusTxt.textContent = 'AI Online';
+          if (pill) pill.title = `Connected to Pinecone · ${d.indexed_chunks || 0} mobile phones indexed`;
+        } else {
+          throw new Error('not ok');
+        }
+      } catch {
+        statusDot.className = 'status-dot offline';
+        statusTxt.textContent = 'AI Offline';
+        if (pill) pill.title = 'Backend is offline or starting up on Render';
+      }
+    }
+
+    /* ════════════════════════════════════════
+       WELCOME → CHAT TRANSITION
+    ════════════════════════════════════════ */
+    function hideWelcome() {
+      if (welcomeEl && welcomeEl.parentNode) {
+        welcomeEl.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+        welcomeEl.style.opacity = '0';
+        welcomeEl.style.transform = 'scale(0.96)';
+        setTimeout(() => welcomeEl.remove(), 260);
+      }
+    }
+
+    /* ════════════════════════════════════════
+       MARKDOWN RENDERER
+    ════════════════════════════════════════ */
+    function renderMd(raw) {
+      if (!raw) return '';
+      let t = raw
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+      t = t.replace(/```(\w*)\n([\s\S]*?)```/g, (_,lang,code) =>
+        `<pre><code class="lang-${lang||'text'}">${code.trim()}</code></pre>`);
+      t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
+      t = t.replace(/((?:\|.+\|(?:\r?\n|$))+)/g, tb => {
+        const rows = tb.trim().split('\n').filter(r=>r.trim());
+        if (rows.length<2) return tb;
+        const sep = rows[1]; if (!/^\|[\s\-:|]+\|$/.test(sep.trim())) return tb;
+        const pr = r=>r.split('|').slice(1,-1).map(c=>c.trim());
+        let h='<table><thead><tr>';
+        pr(rows[0]).forEach(c=>{ h+=`<th>${c}</th>`; });
+        h+='</tr></thead><tbody>';
+        rows.slice(2).forEach(r=>{ h+='<tr>'; pr(r).forEach(c=>{ h+=`<td>${c}</td>`; }); h+='</tr>'; });
+        return h+'</tbody></table>';
+      });
+      t = t.replace(/^&gt;\s?(.+)$/gm,'<blockquote>$1</blockquote>');
+      t = t.replace(/&lt;\/blockquote&gt;\n&lt;blockquote&gt;/g,'\n');
+      t = t.replace(/^### (.+)$/gm,'<h3>$1</h3>');
+      t = t.replace(/^## (.+)$/gm,'<h2>$1</h2>');
+      t = t.replace(/^# (.+)$/gm,'<h1>$1</h1>');
+      t = t.replace(/^---+$/gm,'<hr>');
+      t = t.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>');
+      t = t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+      t = t.replace(/\*(.+?)\*/g,'<em>$1</em>');
+      t = t.replace(/((?:^[-*] .+$\n?)+)/gm, blk => {
+        const lis = blk.trim().split('\n').map(i=>`<li>${i.replace(/^[-*]\s/,'')}</li>`).join('');
+        return `<ul>${lis}</ul>`;
+      });
+      t = t.replace(/((?:^\d+\.\s.+$\n?)+)/gm, blk => {
+        const lis = blk.trim().split('\n').map(i=>`<li>${i.replace(/^\d+\.\s/,'')}</li>`).join('');
+        return `<ol>${lis}</ol>`;
+      });
+      t = t.replace(/^(?!<[a-z]|$)(.+)$/gm,'<p>$1</p>');
+      return t;
+    }
+
+    function escHtml(s) {
+      return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    /* ════════════════════════════════════════
+       ADD MESSAGE
+    ════════════════════════════════════════ */
+    function addMessage(role, text, suggestions, animate=true) {
+      hideWelcome();
+
+      const msgEl = document.createElement('div');
+      msgEl.className = `msg ${role}`;
+      if (!animate) msgEl.style.animation = 'none';
+
+      if (role === 'assistant') {
+        // Avatar
+        const av = document.createElement('div');
+        av.className = 'avatar'; av.setAttribute('aria-hidden','true');
+        av.textContent = 'PK';
+        msgEl.appendChild(av);
+      }
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+
+      if (role === 'assistant') {
+        const md = document.createElement('div');
+        md.className = 'md';
+        md.innerHTML = renderMd(text);
+        bubble.appendChild(md);
+
+        if (suggestions && suggestions.length) {
+          const fu = document.createElement('div');
+          fu.className = 'followups';
+          const lbl = document.createElement('div');
+          lbl.className = 'followups-label';
+          lbl.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg> Suggested`;
+          fu.appendChild(lbl);
+          const grid = document.createElement('div');
+          grid.className = 'followups-grid';
+          suggestions.forEach(s => {
+            const b = document.createElement('button');
+            b.type = 'button'; b.className = 'followup-btn';
+            b.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span>${escHtml(s)}</span>`;
+            b.onclick = () => ask(s);
+            grid.appendChild(b);
+          });
+          fu.appendChild(grid);
+          bubble.appendChild(fu);
+        }
+      } else {
+        bubble.textContent = text;
+      }
+
+      msgEl.appendChild(bubble);
+      thread.appendChild(msgEl);
+      scrollBottom();
+    }
+
+    function scrollBottom() {
+      requestAnimationFrame(() => { chatMain.scrollTop = chatMain.scrollHeight; });
+    }
+
+    /* ════════════════════════════════════════
+       TYPING INDICATOR
+    ════════════════════════════════════════ */
+    function showTyping() {
+      const m = document.createElement('div');
+      m.className = 'msg assistant'; m.id = 'typingMsg';
+
+      const av = document.createElement('div');
+      av.className = 'avatar'; av.setAttribute('aria-hidden','true');
+      av.textContent = 'PK';
+
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      b.innerHTML = `<div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div><span class="typing-txt">Finding recommendations…</span></div>`;
+
+      m.appendChild(av); m.appendChild(b);
+      thread.appendChild(m);
+      scrollBottom();
+    }
+    function hideTyping() { document.getElementById('typingMsg')?.remove(); }
+
+    /* ════════════════════════════════════════
+       SEND MESSAGE
+    ════════════════════════════════════════ */
+    async function sendQuestion(question) {
+      addMessage('user', question);
+      input.value = ''; autoResize();
+      sendBtn.disabled = true;
+      showTyping();
+
+      try {
+        const res = await fetch(`${getApiBase()}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            question,
+            provider: providerSel.value,
+            model: PROVIDER_MODELS[providerSel.value],
+            session_id: currentSessionId,
+          }),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        hideTyping();
+
+        if (data.session_id) {
+          currentSessionId = data.session_id;
+          localStorage.setItem('pk_session_id', data.session_id);
+        }
+        addMessage('assistant', data.answer, data.suggestions);
+      } catch (err) {
+        hideTyping();
+        addMessage('assistant',
+          `⚠️ **Connection Error**\n\nUnable to reach the backend server. ` +
+          `Render's free plan takes ~30 seconds to wake up — please wait a moment and try again.`
+        );
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    }
+
+    function ask(q) { if (q) sendQuestion(q.trim()); }
+
+    /* ════════════════════════════════════════
+       NEW CHAT
+    ════════════════════════════════════════ */
+    function startNewChat() {
+      localStorage.removeItem('pk_session_id');
+      currentSessionId = null;
+      thread.innerHTML = '';
+
+      // Recreate welcome
+      const w = document.createElement('div');
+      w.className = 'welcome'; w.id = 'welcomeScreen';
+      w.innerHTML = `
+        <div class="orb-wrap" aria-hidden="true">
+          <div class="orb"></div>
+          <div class="orb-ring"></div>
+          <div class="orb-ring2"></div>
+        </div>
+        <h2 class="welcome-title">Ask <span>Mobile Assistant PK</span></h2>
+        <p class="welcome-sub">Your AI-powered phone shopping advisor grounded in Pakistan's mobile catalog.</p>
+        <div class="chips" role="group" aria-label="Quick questions">
+          <button class="chip" onclick="ask('Best phone under Rs. 50,000 for gaming?')" type="button">🎮 Best under 50k gaming</button>
+          <button class="chip" onclick="ask('Show me Samsung phones under Rs. 80,000')" type="button">📱 Samsung under 80k</button>
+          <button class="chip" onclick="ask('Compare Xiaomi vs Realme in 30k budget')" type="button">⚖️ Xiaomi vs Realme 30k</button>
+          <button class="chip" onclick="ask('Best camera phone under Rs. 60,000?')" type="button">📸 Best camera under 60k</button>
+          <button class="chip" onclick="ask('What is the battery life of Vivo Y03 Max?')" type="button">🔋 Vivo Y03 Max battery</button>
+          <button class="chip" onclick="ask('iPhone alternatives under Rs. 100,000?')" type="button">🍎 iPhone alternatives</button>
+        </div>
+      `;
+      thread.appendChild(w);
+      input.value = ''; autoResize(); input.focus();
+    }
+
+    /* ════════════════════════════════════════
+       SESSION RESTORE
+    ════════════════════════════════════════ */
+    async function restoreSession() {
+      if (!currentSessionId) return;
+      try {
+        const res = await fetch(`${getApiBase()}/sessions/${currentSessionId}`,
+          { signal: AbortSignal.timeout(6000) });
+        if (!res.ok) { localStorage.removeItem('pk_session_id'); currentSessionId = null; return; }
+        const data = await res.json();
+        const msgs = data.messages || [];
+        if (!msgs.length) return;
+        msgs.forEach(m => addMessage(m.role, m.content, null, false));
+      } catch {
+        // session unavailable (Render was sleeping) — start fresh silently
+        localStorage.removeItem('pk_session_id'); currentSessionId = null;
+      }
+    }
+
+    /* ════════════════════════════════════════
+       INPUT AUTO-RESIZE + SEND
+    ════════════════════════════════════════ */
+    function autoResize() {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+    }
+
+    input.addEventListener('input', autoResize);
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const q = input.value.trim();
+        if (q && !sendBtn.disabled) sendQuestion(q);
+      }
+    });
+
+    sendBtn.addEventListener('click', function(e) {
+      // Ripple effect
+      const r = document.createElement('span');
+      r.className = 'ripple';
+      const rect = sendBtn.getBoundingClientRect();
+      const sz = Math.max(rect.width, rect.height);
+      r.style.cssText = `width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
+      sendBtn.appendChild(r);
+      r.addEventListener('animationend', () => r.remove());
+
+      const q = input.value.trim();
+      if (q && !sendBtn.disabled) sendQuestion(q);
+    });
+
+    /* ════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════ */
+    initProviders();
+    checkHealth();
+    restoreSession();
+    input.focus();
+  </script>
+
+</body>
+</html>
